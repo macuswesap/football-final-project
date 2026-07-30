@@ -1,5 +1,6 @@
 import csv
 import sqlite3
+from urllib.parse import unquote_plus #this is for our team profile to remove whitespace/casing when making a request in Vercel. Without this our program wont work :(
 from datetime import datetime
 from pathlib import Path
 from flask import Flask, render_template, request, flash, redirect, url_for
@@ -320,7 +321,17 @@ def about_view():
 @app.route("/team/<team_name>")
 def team_profile(team_name):
     teams, df = load_team_data()
-    team = next((t for t in teams if t["team"] == team_name), None)
+    # Vercel's runtime can hand this route a still-encoded or differently-cased
+    # value (e.g. "Seattle%20Seahawks" or extra whitespace) even though Flask's
+    # local dev server always decodes it cleanly. Clean it up before matching.
+    lookup_name = unquote_plus(team_name).strip()
+    team = next((t for t in teams if t["team"] == lookup_name), None)
+    if team is None:
+        # Fallback: case-insensitive match in case of capitalization differences
+        team = next(
+            (t for t in teams if t["team"].strip().lower() == lookup_name.lower()),
+            None,
+        )
     if team is None:
         return render_template("team_profile.html", team=None, team_name=team_name), 404
     return render_template("team_profile.html", team=team, team_name=team_name)
