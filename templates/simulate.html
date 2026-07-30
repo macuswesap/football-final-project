@@ -53,7 +53,8 @@
     <p>Most common Super Bowl matchup:
       <strong>{{ summary.most_common_matchup_teams[0] }} vs {{ summary.most_common_matchup_teams[1] }}</strong>
       ({{ summary.most_common_matchup_count }} times, {{ summary.most_common_matchup_pct }}%)</p>
-    <p>Average upsets per playoff run: <strong>{{ summary.avg_upsets }}</strong></p><p><strong>Most Common Upset:</strong> {{ summary.most_common_upset }}</p><h4>Most Common Bracket</h4><pre>{{ summary.bracket|tojson(indent=2) }}</pre>
+    <p>Average upsets per playoff run: <strong>{{ summary.avg_upsets }}</strong></p>
+    <p><strong>Most Common Upset:</strong> {{ summary.most_common_upset }}</p>
     {% else %}
     <p>Enter a number of simulations to see results.</p>
     {% endif %}
