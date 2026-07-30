@@ -1,3 +1,5 @@
+
+
 {% extends "base.html" %}
 {% block title %}Matchup History{% endblock %}
 
@@ -20,7 +22,7 @@
   <button type="submit" class="secondary">Clear all history</button>
 </form>
 
-<div class="grid">
+<div class="history-grid">
   {% for log in logs %}
   <article class="card-panel">
     <span class="pill">{{ log.created_at }}</span>
@@ -38,3 +40,6 @@
 <p>No matchups have been logged yet. Go run one on the <a href="{{ url_for('matchup') }}">Matchup</a> page.</p>
 {% endif %}
 {% endblock %}
+
+
+
