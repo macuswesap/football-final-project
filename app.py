@@ -12,7 +12,7 @@ app.secret_key = "dev-secret-key"  # needed for flash messages it wont work if w
 
 DATA_FILE = Path(__file__).parent / "nfl_teams.csv"
 #This is our database file for the history of matchups
-DB_FILE = Path(__file__).parent / "matchup_log.db"
+DB_FILE = Path("/tmp/matchup_log.db")
 
 #Here we make the method to get our database of matchups
 def get_db():
