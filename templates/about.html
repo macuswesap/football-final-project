@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1> About Our Website</h1>
+<p> Our website functions to give users freedom to: </p>
+<ul>
+ <li> Look at all the nfl teams and their important statistics </li>
+ <li> Explore different teams in head to head matchups </li>
+ <li> Run playoff simulations to see the strongest teams </li>
+</ul>
+<h2>
+    How We Calculate Strength
+</h2>
+<p>
+    We used a formula to try and take into account all the statistics we had with different rates.
+    Our formula came in three stages 
+</p>
+<ul>
+    <li>
+        <b>Step 1 (Base Performance Score): </b> The base performance score equals thirty-five times the team's win percentage, plus points scored per game, 
+        minus one-point-two-five times points allowed per game, plus zero-point-zero-five times net yards per game, plus one-point-five times touchdowns per game, minus two-point-five times turnovers per game. 
+    </li>
+    <li>
+        <b>Step 2 (Schedule Adjustment): </b> The raw strength score equals the base performance score multiplied by one plus one-point-five times the difference between the 
+            team's strength of schedule and point-five-zero-zero.
+    </li>
+    <li>
+       <b>Step 3 (Baseline Shift): </b> The final adjusted strength score equals the raw strength score plus thirty.
+    </li>
+</ul>
+<p>
+    We know our strength formula is effective as it sucessfully ranks the teams that performed the best in the regular season plus playoffs. For example it ranks the Seahawks as strongest and Patriots as second strongest and they were the two teams in the SuperBowl with the Seahawks winning.
+</p>
+{% endblock %}

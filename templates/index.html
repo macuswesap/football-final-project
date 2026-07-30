@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}NFL Matchup Lab{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>NFL Matchup Lab</h1>
+  <p>Pick where you want to go.</p>
+</section>
+
+<div class="grid">
+  <article class="card-panel">
+    <h3>Build a matchup</h3>
+    <p>Choose two teams and see a projected head-to-head score.</p>
+    <a href="{{ url_for('matchup') }}" role="button">Go to Matchup</a>
+  </article>
+
+  <article class="card-panel">
+    <h3>Team data</h3>
+    <p>Browse the full NFL team dataset and stats.</p>
+    <a href="{{ url_for('data_view') }}" role="button">Go to Data Table</a>
+  </article>
+
+  <article class="card-panel">
+    <h3>Simulate the playoffs</h3>
+    <p>Run the real 2025-2026 NFL playoff bracket thousands of times and see who wins the most Super Bowls.</p>
+    <a href="{{ url_for('simulate') }}" role="button">Go to Simulation</a>
+  </article>
+</div>
+{% endblock %}

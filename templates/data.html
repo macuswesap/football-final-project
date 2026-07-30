@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form>
+  <select name="sort" onchange="this.form.submit()">
+    <option value="" {% if sort == '' or not sort %}selected{% endif %}>Default</option>
+    <option value="record" {% if sort == 'record' %}selected{% endif %}>Record</option>
+    <option value="adjusted_strength" {% if sort == 'adjusted_strength' %}selected{% endif %}>Adjusted Strength</option>
+    <option value="ppg" {% if sort == 'ppg' %}selected{% endif %}>Points/Game</option>
+    <option value="papg" {% if sort == 'papg' %}selected{% endif %}>Points Allowed/Game</option>
+  </select>
+</form>
+
+<div style="overflow-x:auto">
+  <table>
+    <tr>
+      {% for c in columns %}
+      <th>{{ c }}</th>
+      {% endfor %}
+    </tr>
+
+    {% for r in rows %}
+    <tr>
+      {% for c in columns %}
+      <td>
+        {% if c == 'Team' %}
+        <a href="{{ url_for('team_profile', team_name=r[c]) }}">{{ r[c] }}</a>
+        {% else %}
+        {{ r[c] }}
+        {% endif %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

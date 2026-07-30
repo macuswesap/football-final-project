@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Create a matchup{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Build an NFL head-to-head matchup</h1>
+  <p>Choose two teams and compare the matchup. Every matchup you run gets saved to the <a href="{{ url_for('history') }}">History</a> page.</p>
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    <p role="alert">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="grid">
+  <article class="card-panel">
+    <form action="{{ url_for('matchup') }}" method="post">
+      <label for="home_team">Team 1</label>
+      <select id="home_team" name="home_team" required>
+        {% for team in teams %}
+        <option value="{{ team.team }}" {% if matchup_result and matchup_result.home_team.team == team.team %}selected{% endif %}>{{ team.team }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="away_team">Team 2</label>
+      <select id="away_team" name="away_team" required>
+        {% for team in teams %}
+        <option value="{{ team.team }}" {% if matchup_result and matchup_result.away_team.team == team.team %}selected{% endif %}>{{ team.team }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Create matchup</button>
+    </form>
+  </article>
+
+  <article class="card-panel">
+    {% if matchup_result %}
+    <h3>{{ matchup_result.home_team.team }} vs {{ matchup_result.away_team.team }}</h3>
+    <p>Matchup Probability: {{ matchup_result.probability}}</p>
+    <p><strong>Winner:</strong> {{ matchup_result.winner }}</p>
+
+    {% if matchup_result.analysis %}
+    {% set a = matchup_result.analysis %}
+    <hr>
+    <p>
+      <strong>{{ a.home_offense.team }}'s offense projects to
+      {% if a.home_offense.thrives %}<strong>thrive</strong>{% else %}struggle{% endif %}</strong>
+      vs {{ a.home_offense.opponent }}'s defense.<br>
+      <small>{{ a.home_offense.reason }}</small>
+    </p>
+    <p>
+      <strong>{{ a.away_offense.team }}'s offense projects to
+      {% if a.away_offense.thrives %}<strong>thrive</strong>{% else %}struggle{% endif %}</strong>
+      vs {{ a.away_offense.opponent }}'s defense.<br>
+      <small>{{ a.away_offense.reason }}</small>
+    </p>
+    <p>
+      This will be 
+      {%if a.home_offense.thrives and a.away_offense.thrives%} an <b> offensive battle</b> {%elif not a.home_offense.thrives and not a.away_offense.thrives%} a <b> defensive struggle</b>
+      {%elif a.home_offense.thrives and not a.away_offense.thrives%} a {{a.home_offense.team}} dominated game {%elif not a.home_offense.thrives and  a.away_offense.thrives%} a {{a.away_offense.team}} dominated game {% else  %} a <b> neutral </b> game {%endif %}
+    </p>
+    <p><strong>Strength of Schedule:</strong> {{ a.sos_note }}</p>
+    {% endif %}
+    {% else %}
+    <p>Select two teams to see a projected matchup.</p>
+    {% endif %}
+  </article>
+</div>
+{% endblock %}

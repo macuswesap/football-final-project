@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Playoff Simulation{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h2>Simulate the 2025-2026 NFL Playoffs</h2>
+  <p>Runs the real playoff bracket (Wild Card &rarr; Divisional &rarr; Conference Championship &rarr; Super Bowl) as many times as you like, using each team's Adjusted_Strength rating.</p>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
+    <figure style="margin: 0; text-align: center;">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBqFdAfcmTcFRBQ0oAE2NRIXKYikwsoBzC7641Tx3g867ZIpl8MGnsGS4&s=10" alt="Nfl Playoff Bracket" style="width: 320px; max-width: 100%; height: auto; border-radius: 8px;">
+      <figcaption style="margin-top: 0.5rem; font-size: 0.95rem; color: white;">NFL Plyoff Bracket</figcaption>
+    </figure>
+    <figure style="margin: 0; text-align: center;">
+      <img src="https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2026/01/0/0/16x9seahawks.jpg?ve=1&tl=1" alt="Nfl Playoff Bracket Results" style="width: 700px; max-width: 100%; height: auto; border-radius: 8px;">
+      <figcaption style="margin-top: 0.5rem; font-size: 0.95rem; color: white;">NFL Playoff Bracket Results</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="grid">
+  <article class="card-panel">
+    <form action="{{ url_for('simulate') }}" method="post">
+      <label for="num_simulations">Number of simulations</label>
+      <input
+        type="number"
+        id="num_simulations"
+        name="num_simulations"
+        min="1"
+        step="1"
+        value="{{ n }}"
+        required
+      >
+      <button type="submit">Run playoff simulation</button>
+    </form>
+
+    <p><strong>AFC seeds:</strong>
+      {% for team in afc_seeds %}{{ loop.index }}. {{ team }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+    <p><strong>NFC seeds:</strong>
+      {% for team in nfc_seeds %}{{ loop.index }}. {{ team }}{% if not loop.last %}, {% endif %}{% endfor %}
+    </p>
+
+    {% if error %}
+    <p class="pill">{{ error }}</p>
+    {% endif %}
+  </article>
+
+  <article class="card-panel">
+    {% if summary %}
+    <span class="pill">Results after {{ summary.n }} simulations</span>
+    <p>Most Super Bowl wins: <strong>{{ summary.most_wins_team }}</strong>
+      ({{ summary.most_wins_count }} wins, {{ summary.most_wins_pct }}%)</p>
+    <p>Most common Super Bowl matchup:
+      <strong>{{ summary.most_common_matchup_teams[0] }} vs {{ summary.most_common_matchup_teams[1] }}</strong>
+      ({{ summary.most_common_matchup_count }} times, {{ summary.most_common_matchup_pct }}%)</p>
+    <p>Average upsets per playoff run: <strong>{{ summary.avg_upsets }}</strong></p><p><strong>Most Common Upset:</strong> {{ summary.most_common_upset }}</p><h4>Most Common Bracket</h4><pre>{{ summary.bracket|tojson(indent=2) }}</pre>
+    {% else %}
+    <p>Enter a number of simulations to see results.</p>
+    {% endif %}
+  </article>
+</div>
+
+{% if playoff_results %}
+<article class="card-panel" style="margin-top: 1.5rem;">
+  <h3>Super Bowl results by team</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Team</th>
+        <th>Super Bowl wins</th>
+        <th>Championship %</th>
+        <th>Super Bowl appearances</th>
+        <th>Appearance %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in playoff_results %}
+      <tr>
+        <td>{{ row.team }}</td>
+        <td>{{ row.super_bowl_wins }}</td>
+        <td>{{ row.win_pct }}%</td>
+        <td>{{ row.super_bowl_appearances }}</td>
+        <td>{{ row.appearance_pct }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</article>
+{% endif %}
+{% endblock %}

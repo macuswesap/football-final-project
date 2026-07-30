@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}NFL Matchup Lab{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@2/css/pico.min.css">
+    <style>
+      body {
+        background: linear-gradient(135deg, #07111f, #132742 60%, #1d3b66);
+      }
+
+      main.container {
+        padding-top: 1.5rem;
+      }
+
+      .hero {
+        padding: 2rem 0 1rem;
+      }
+
+      .card-panel {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1rem;
+        padding: 1.2rem;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        background: rgba(93, 239, 159, 0.2);
+        color: #8ee9a7;
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <nav aria-label="main navigation">
+        <ul>
+          <li><a href="{{ url_for('index') }}" {% if request.endpoint == 'index' %}aria-current="page"{% endif %}>Home</a></li>
+          <li><a href="{{ url_for('matchup') }}" {% if request.endpoint == 'matchup' %}aria-current="page"{% endif %}>Matchup</a></li>
+          <li><a href="{{ url_for('data_view') }}" {% if request.endpoint == 'data_view' %}aria-current="page"{% endif %}>Data Table</a></li>
+          <li><a href="{{ url_for('simulate') }}" {% if request.endpoint == 'simulate' %}aria-current="page"{% endif %}>Simulation</a></li>
+          <li><a href="{{ url_for('history') }}" {% if request.endpoint == 'history' %}aria-current="page"{% endif %}>History</a></li>
+          <li><a href="{{url_for('about_view')}}" {% if request.endpoint == 'about' %}aria-current="page"{% endif %}>About</a></li>
+        </ul>
+      </nav>
+
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

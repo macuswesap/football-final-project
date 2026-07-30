@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{% if team %}{{ team.team }}{% else %}Team not found{% endif %}{% endblock %}
+
+{% block content %}
+{% if team %}
+<section class="hero">
+  <a href="{{ url_for('data_view') }}">&larr; Back to Data Table</a>
+  <h1>{{ team.team }}</h1>
+  <p>Record: {{ team.record }} &nbsp;|&nbsp; Win %: {{ team.win_pct }}</p>
+</section>
+
+<div class="grid">
+  <article class="card-panel">
+    <span class="pill">Strength</span>
+    <p><strong>Adjusted Strength:</strong> {{ team.Adjusted_Strength }}</p>
+    <p><strong>Strength of Schedule:</strong> {{ team.strength_of_schedule }}</p>
+  </article>
+
+  <article class="card-panel">
+    <span class="pill">Offense</span>
+    <p><strong>Points Scored/Game:</strong> {{ team.points_scored_per_game }}</p>
+    <p><strong>Yards/Game:</strong> {{ team.yards_per_game }}</p>
+    <p><strong>Total TDs:</strong> {{ team.total_tds }}</p>
+  </article>
+
+  <article class="card-panel">
+    <span class="pill">Defense</span>
+    <p><strong>Points Allowed/Game:</strong> {{ team.points_allowed_per_game }}</p>
+    <p><strong>Yards Allowed/Game:</strong> {{ team.yards_allowed_per_game }}</p>
+    <p><strong>Turnovers:</strong> {{ team.turnovers }}</p>
+  </article>
+</div>
+
+<div class="card-panel" style="margin-top: 1rem;">
+  <a href="{{ url_for('matchup') }}" role="button">Simulate a matchup with {{ team.team }}</a>
+</div>
+
+{% else %}
+<section class="hero">
+  <h1>Team not found</h1>
+  <p>We couldn't find a team called "{{ team_name }}".</p>
+  <a href="{{ url_for('data_view') }}" role="button">Back to Data Table</a>
+</section>
+{% endif %}
+{% endblock %}

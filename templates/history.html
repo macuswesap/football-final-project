@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Matchup History{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Matchup History</h1>
+  <p>Every matchup that's been run gets logged here, newest first.</p>
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    <p role="alert">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% if logs %}
+<form action="{{ url_for('clear_history') }}" method="post" onsubmit="return confirm('Delete all matchup history? This cannot be undone.');" style="margin-bottom: 1rem;">
+  <button type="submit" class="secondary">Clear all history</button>
+</form>
+
+<div class="grid">
+  {% for log in logs %}
+  <article class="card-panel">
+    <span class="pill">{{ log.created_at }}</span>
+    <h3>{{ log.home_team }} vs {{ log.away_team }}</h3>
+    <p>Score: {{ log.home_score }} - {{ log.away_score }}</p>
+    <p><strong>Winner:</strong> {{ log.winner }}</p>
+    <p>{{ log.probability }}</p>
+    <form action="{{ url_for('delete_matchup', log_id=log.id) }}" method="post" onsubmit="return confirm('Delete this matchup from history?');">
+      <button type="submit" class="secondary">Delete</button>
+    </form>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p>No matchups have been logged yet. Go run one on the <a href="{{ url_for('matchup') }}">Matchup</a> page.</p>
+{% endif %}
+{% endblock %}
